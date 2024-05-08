@@ -1,0 +1,313 @@
+<!-- <app-header></app-header>
+<div class="site-section">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-md-7">
+        <h2 class="heading-21921">Account Information</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class=" mb-4">
+          <div class="form-group">
+            <label for="customerName">Name</label>
+            <input type="text" class="form-control" id='customerName' value={{user.name}} disabled/>
+          </div>
+          <div class="form-group">
+            <label for="customerEmail">Email</label>
+            <input type="email" class="form-control" id='customerEmail' value={{user.email}} disabled />
+          </div>
+          <div class="form-group">
+            <label for="customerMobileNum">Mobile Number</label>
+            <input type="text" class="form-control " id="customerMobileNum" value={{user.mobileNumber}} disabled/>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class=" mb-4">
+          <div class="form-group">
+            <label for="customerAccNo">Account Number</label>
+            <input type="text" class="form-control" id='customerAccNo' value={{account.accountNumber}} disabled/>
+          </div>
+          <div class="form-group">
+            <label for="customerAccountType">Account Type</label>
+            <input type="email" class="form-control" id='customerAccountType' value={{account.accountType}} disabled />
+          </div>
+          <div class="form-group">
+            <label for="branchAddress">Branch Address</label>
+            <input type="text" class="form-control " id="branchAddress" value={{account.branchAddress}} disabled/>
+          </div>
+          <div class="form-group">
+            <label for="branchAddress">Balance</label>
+            <input type="number" class="form-control " id="balance" value={{account.balance}} disabled/>
+          </div>
+        </div>
+      </div>
+  </div>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col">
+      <div class="">
+        <button class="btn btn-eazybank" routerLink="/dashboard">
+          BACK
+        </button>
+      </div>
+    </div>
+  </div> -->
+
+
+
+
+
+<app-header></app-header>
+
+<!-- Create Account Accordion -->
+<div class="ui styled fluid accordion">
+  <div class="title" (click)="toggleTab('createAccount')" [class.active]="activeTab === 'createAccount'">
+    <i class="dropdown icon"></i>
+    Create Account
+  </div>
+  <div class="content" *ngIf="activeTab === 'createAccount'">
+    <div class="limiter">
+      <div class="container-login100">
+        <div class="wrap-login100">
+          <div class="card shadow">
+            <div class="card-body">
+              <form (ngSubmit)="onSubmit()" #registerForm="ngForm"
+                class="login100-form validate-form p-l-55 p-r-55 p-t-140">
+                <span class="login100-form-title">
+                  Create Account
+                </span>
+
+                <div class="form-group">
+                  <label for="customerId">Customer Id:</label>
+                  <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter Customer Id">
+                    <input class="input100" type="number" name="customerId" id="customerId" placeholder="Customer Id"
+                      required [(ngModel)]="createaccount.customerId" #customerId="ngModel">
+                    <span class="focus-input100"></span>
+                  </div>
+                  <span class="text-danger"
+                    *ngIf="(customerId.touched || registerForm.submitted) && customerId.errors?.['required']">Error:
+                    Customer Id is required!</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="accountNumber">Account Number:</label>
+                  <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter Account Number">
+                    <input class="input100" type="number" value="Account no" name="accountNumber" id="accountNumber"
+                      placeholder="Account Number" required [(ngModel)]="createaccount.accountNumber"
+                      #accountNumber="ngModel">
+                    <span class="focus-input100"></span>
+                  </div>
+                  <span class="text-danger"
+                    *ngIf="(accountNumber.touched || registerForm.submitted) && accountNumber.errors?.['required']">Error:
+                    Account Number is required!</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="accountType">Account Type:</label>
+                  <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter Account Type">
+                    <input class="input100" type="text" name="accountType" id="accountType" placeholder="Account Type"
+                      required [(ngModel)]="createaccount.accountType" #accountType="ngModel">
+                    <span class="focus-input100"></span>
+                  </div>
+                  <span class="text-danger"
+                    *ngIf="(accountType.touched || registerForm.submitted) && accountType.errors?.['required']">Error:
+                    Account Type is required!</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="branchAddress">Branch Address:</label>
+                  <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter Branch Address">
+                    <input class="input100" type="text" name="branchAddress" id="branchAddress"
+                      placeholder="Branch Address" required [(ngModel)]="createaccount.branchAddress"
+                      #branchAddress="ngModel">
+                    <span class="focus-input100"></span>
+                  </div>
+                  <span class="text-danger"
+                    *ngIf="(branchAddress.touched || registerForm.submitted) && branchAddress.errors?.['required']">Error:
+                    Branch Address is required!</span>
+                </div>
+
+                <div class="container-login100-form-btn">
+                  <button class="login100-form-btn" type="submit">Create Account</button>
+                </div>
+
+                <span class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</span>
+                <span class="text-success" *ngIf="successMessage">{{ successMessage }}</span>
+
+              </form>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- View Account Accordion -->
+<div class="ui styled fluid accordion">
+  <div class="title" (click)="toggleTab('viewAccount')" [class.active]="activeTab === 'viewAccount'">
+    <i class="dropdown icon"></i>
+    View Account
+  </div>
+  <div class="content" *ngIf="activeTab === 'viewAccount'">
+    <div class="site-section">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-7">
+            <h2 class="heading-21921">Account Information</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class=" mb-4">
+              <div class="form-group">
+                <label for="customerName">Name</label>
+                <input type="text" class="form-control" id='customerName' value={{user.name}} disabled />
+              </div>
+              <div class="form-group">
+                <label for="customerEmail">Email</label>
+                <input type="email" class="form-control" id='customerEmail' value={{user.email}} disabled />
+              </div>
+              <div class="form-group">
+                <label for="customerMobileNum">Mobile Number</label>
+                <input type="text" class="form-control " id="customerMobileNum" value={{account.mobileNumber}} disabled />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class=" mb-4">
+              <div class="form-group">
+                <label for="customerAccNo">Account Number</label>
+                <input type="text" class="form-control" id='customerAccNo' value={{account.accountNumber}} disabled />
+              </div>
+              <div class="form-group">
+                <label for="customerAccountType">Account Type</label>
+                <input type="email" class="form-control" id='customerAccountType' value={{account.accountType}}
+                  disabled />
+              </div>
+              <div class="form-group">
+                <label for="branchAddress">Branch Address</label>
+                <input type="text" class="form-control " id="branchAddress" value={{account.branchAddress}} disabled />
+              </div>
+              <div class="form-group">
+                <label for="branchAddress">Balance</label>
+                <input type="number" class="form-control " id="balance" value={{account.balance}} disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Account Accordion -->
+<!-- Update Account Accordion -->
+<div class="ui styled fluid accordion">
+  <div class="title" (click)="toggleTab('updateAccount')" [class.active]="activeTab === 'updateAccount'">
+    <i class="dropdown icon"></i>
+    Update Account
+  </div>
+  <div class="content" *ngIf="activeTab === 'updateAccount'">
+    <div class="site-section">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-7">
+            <h2 class="heading-21921">Update Account Information</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class=" mb-4">
+              <div class="form-group">
+                <label for="customerName">Name</label>
+                <input type="text" class="form-control" id="customerName" value="{{user.name}}"  />
+              </div>
+              <div class="form-group">
+                <label for="customerEmail">Email</label>
+                <input type="email" class="form-control" id='customerEmail' value={{user.email}}  />
+              </div>
+              <div class="form-group">
+                <label for="customerMobileNum">Mobile Number</label>
+                <input type="text" class="form-control " id="customerMobileNum" value={{updatedAccount.mobileNumber}}  />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class=" mb-4">
+              <div class="form-group">
+                <label for="customerAccNo">Account Number</label>
+                <input type="text" class="form-control" id='customerAccNo' value={{updatedAccount.accountNumber}}  />
+              </div>
+              <div class="form-group">
+                <label for="customerAccountType">Account Type</label>
+                <input type="email" class="form-control" id='customerAccountType' value={{updatedAccount.accountType}}
+                   />
+              </div>
+              <div class="form-group">
+                <label for="branchAddress">Branch Address</label>
+                <input type="text" class="form-control " id="branchAddress" value={{updatedAccount.branchAddress}}  />
+              </div>
+              <div class="form-group">
+                <label for="branchAddress">Balance</label>
+                <input type="number" class="form-control " id="balance" value={{updatedAccount.balance}}  />
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- Add update button -->
+        <div class="row mt-3">
+          <div class="col">
+            <button class="btn btns" (click)="updateAccount()">Update Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Delete Account Accordion -->
+<!-- Delete Account Accordion -->
+<div class="ui styled fluid accordion">
+  <div class="title" (click)="toggleTab('deleteAccount')" [class.active]="activeTab === 'deleteAccount'">
+    <i class="dropdown icon"></i>
+    Delete Account
+  </div>
+  <div class="content" *ngIf="activeTab === 'deleteAccount'">
+    <div class="site-section">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-md-7">
+            <h2 class="heading-21921">Delete Account</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>Are you sure you want to delete this account?</p>
+            <button class="btn btn-danger" (click)="deleteAccount()">Delete Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row mt-5">
+  <div class="col">
+    <div class="">
+      <button class="btn btns" routerLink="/dashboard">
+        BACK
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,306 @@
+<app-header></app-header>
+
+<!-- View Balance Accordion -->
+<div class="ui styled fluid accordion">
+  <div class="title" (click)="toggleTab('viewBalance')" [class.active]="activeTab === 'viewBalance'">
+    <i class="dropdown icon"></i>
+    View Balance
+  </div>
+  <div class="content" *ngIf="activeTab === 'viewBalance'">
+    <div class="site-section">
+      <div class="table-responsive-md">
+        <div class="row mb-4">
+          <div class="col-md-7">
+            <h3 class="heading-21921">Transaction History</h3>
+          </div>
+
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-7">
+            <h3 class=" heading-21921">Account Balance</h3>
+          </div>
+        </div>
+        <div class="row text-white align-items-center text-center h-100">
+          <div class="col-md-4 bg-dark p-5 " style="height:130px;">
+            <h1 class="text-white">{{ balance | currency }}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive-md">
+        <div class="row mb-4">
+          <div class="col-md-7">
+            <h3 class="heading-21921">Transaction Details</h3>
+          </div>
+        </div>
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Summary</th>
+              <th scope="col">Withdrawal</th>
+              <th scope="col">Deposit</th>
+              <th scope="col">Transfer</th>
+              <th scope="col">Closing Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of transactions">
+              <th>{{transaction.transactionDt}}</th>
+              <td>{{transaction.transactionSummary}}</td>
+              <td>{{transaction.transactionType=='Withdrawal' ? (transaction.transactionAmt | currency) : ' '}}</td>
+              <td>{{transaction.transactionType=='Deposit' ? (transaction.transactionAmt | currency) : ' '}}</td>
+              <td>{{transaction.transactionType=='Transfer' ? (transaction.transactionAmt | currency) : ' '}}</td>
+
+              <td>{{transaction.closingBalance | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="ui styled fluid accordion">
+  <!-- Transfer Tab -->
+  <div class="title" (click)="toggleTab('transfer')" [class.active]="activeTab === 'transfer'">
+    <i class="dropdown icon"></i>
+    Transfer
+  </div>
+  <div class="content" *ngIf="activeTab === 'transfer'">
+    <!-- Transfer Form Content Goes Here -->
+    <div class="limiter">
+      <div class="card shadow">
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()" #registerForm="ngForm"
+            class="login100-form validate-form p-l-55 p-r-55 p-t-140">
+            <span class="login100-form-title">
+              Transfer Details
+            </span>
+
+            <!-- Sender's Details -->
+            <div class="form-group">
+              <label for="sendersCustomerId">Sender's Customer Id:</label>
+              <input class="input100" type="number" name="sendersCustomerId" id="sendersCustomerId"
+                placeholder="Sender's Customer Id" required [(ngModel)]="sendersAccount.customerId"
+                #sendersCustomerId="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="sendersAccountNumber">Sender's Account Number:</label>
+              <input class="input100" type="number" name="sendersAccountNumber" id="sendersAccountNumber"
+                placeholder="Sender's Account Number" required [(ngModel)]="sendersAccount.accountNumber"
+                #sendersAccountNumber="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="sendersAccountType">Sender's Account Type:</label>
+              <select class="input100" name="sendersAccountType" id="sendersAccountType"
+                [(ngModel)]="sendersAccount.accountType" required #sendersAccountType="ngModel">
+                <option value="" disabled selected>Select Account Type</option>
+                <option value="savings">Savings</option>
+                <option value="current">Current</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+
+            <!-- Transaction Details -->
+            <div class="form-group">
+              <label for="transactionAmt">Transaction Amount:</label>
+              <input class="input100" type="number" name="transactionAmt" id="transactionAmt"
+                placeholder="Transaction Amount" required [(ngModel)]="transaction.transactionAmt"
+                #transactionAmt="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="transactionSummary">Transaction Summary:</label>
+              <input class="input100" type="text" name="transactionSummary" id="transactionSummary"
+                placeholder="Transaction Summary" required [(ngModel)]="transaction.transactionSummary"
+                #transactionSummary="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <!-- Receiver's Details -->
+            <div class="form-group">
+              <label for="receiversCustomerId">Receiver's Customer Id:</label>
+              <input class="input100" type="number" name="receiversCustomerId" id="receiversCustomerId"
+                placeholder="Receiver's Customer Id" required [(ngModel)]="receiversAccount.customerId"
+                #receiversCustomerId="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="receiversAccountNumber">Receiver's Account Number:</label>
+              <input class="input100" type="number" name="receiversAccountNumber" id="receiversAccountNumber"
+                placeholder="Receiver's Account Number" required [(ngModel)]="receiversAccount.accountNumber"
+                #receiversAccountNumber="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="receiversAccountType">Receiver's Account Type:</label>
+              <select class="input100" name="receiversAccountType" id="receiversAccountType"
+                [(ngModel)]="receiversAccount.accountType" required #receiversAccountType="ngModel">
+                <option value="" disabled selected>Select Account Type</option>
+                <option value="savings">Savings</option>
+                <option value="current">Current</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="container-login100-form-btn">
+              <button class="login100-form-btn" type="submit">Transfer</button>
+            </div>
+            <span class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</span>
+            <span class="text-success" *ngIf="successMessage">{{ successMessage }}</span>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Withdraw Tab -->
+  <div class="title" (click)="toggleTab('withdraw')" [class.active]="activeTab === 'withdraw'">
+    <i class="dropdown icon"></i>
+    Withdraw
+  </div>
+  <div class="content" *ngIf="activeTab === 'withdraw'">
+    <div class="limiter">
+      <div class="card shadow">
+        <div class="card-body">
+          <form (ngSubmit)="onWithdrawalSubmit()" #withdrawalForm="ngForm"
+            class="login100-form validate-form p-l-55 p-r-55 p-t-140">
+            <span class="login100-form-title">
+              Withdrawal Details
+            </span>
+
+            <!-- Account Details -->
+            <div class="form-group">
+              <label for="accountNumber">Account Number:</label>
+              <input class="input100" type="number" name="accountNumber" id="accountNumber" placeholder="Account Number"
+                required [(ngModel)]="withdrawal.accountNumber" #accountNumber="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <div class="form-group">
+                <label for="receiversCustomerId"> Customer Id:</label>
+                <input class="input100" type="number" name="CustomerId" id="CustomerId" placeholder=" Customer Id"
+                  required [(ngModel)]="withdrawal.customerId" #receiversCustomerId="ngModel">
+                <span class="focus-input100"></span>
+              </div>
+
+            </div>
+            <!-- Transaction Details -->
+            <div class="form-group">
+              <label for="transactionAmt">Transaction Amount:</label>
+              <input class="input100" type="number" name="transactionAmt" id="transactionAmt"
+                placeholder="Transaction Amount" required [(ngModel)]="withdrawal.transactionAmt"
+                #transactionAmt="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="transactionSummary">Transaction Summary:</label>
+              <input class="input100" type="text" name="transactionSummary" id="transactionSummary"
+                placeholder="Transaction Summary" required [(ngModel)]="withdrawal.transactionSummary"
+                #transactionSummary="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="container-login100-form-btn">
+              <button class="login100-form-btn" type="submit">Withdraw</button>
+            </div>
+            <span class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</span>
+            <span class="text-success" *ngIf="successMessage">{{ successMessage }}</span>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Deposit Tab -->
+  <div class="title" (click)="toggleTab('deposit')" [class.active]="activeTab === 'deposit'">
+    <i class="dropdown icon"></i>
+    Deposit
+  </div>
+  <div class="content" *ngIf="activeTab === 'deposit'">
+    <div class="limiter">
+      <div class="card shadow">
+        <div class="card-body">
+          <form (ngSubmit)="onDepositSubmit()" #depositForm="ngForm"
+            class="login100-form validate-form p-l-55 p-r-55 p-t-140">
+            <span class="login100-form-title">
+              Deposit Details
+            </span>
+
+            <!-- Account Details -->
+            <div class="form-group">
+              <label for="accountNumber">Account Number:</label>
+              <input class="input100" type="number" name="accountNumber" id="accountNumber" placeholder="Account Number"
+                required [(ngModel)]="deposit.accountNumber" #accountNumber="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <div class="form-group">
+                <label for="receiversCustomerId"> Customer Id:</label>
+                <input class="input100" type="number" name="CustomerId" id="CustomerId" placeholder=" Customer Id"
+                  required [(ngModel)]="deposit.customerId" #receiversCustomerId="ngModel">
+                <span class="focus-input100"></span>
+              </div>
+
+            </div>
+
+            <!-- Transaction Details -->
+            <div class="form-group">
+              <label for="transactionAmt">Transaction Amount:</label>
+              <input class="input100" type="number" name="transactionAmt" id="transactionAmt"
+                placeholder="Transaction Amount" required [(ngModel)]="deposit.transactionAmt"
+                #transactionAmt="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="transactionSummary">Transaction Summary:</label>
+              <input class="input100" type="text" name="transactionSummary" id="transactionSummary"
+                placeholder="Transaction Summary" required [(ngModel)]="deposit.transactionSummary"
+                #transactionSummary="ngModel">
+              <span class="focus-input100"></span>
+            </div>
+
+            <div class="container-login100-form-btn">
+              <button class="login100-form-btn" type="submit">Deposit</button>
+            </div>
+            <span class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</span>
+            <span class="text-success" *ngIf="successMessage">{{ successMessage }}</span>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="row mt-5">
+  <div class="col">
+    <div class="">
+      <button class="btn btns" routerLink="/dashboard">
+        BACK
+      </button>
+    </div>
+  </div>
+</div>
